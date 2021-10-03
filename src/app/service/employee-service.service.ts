@@ -9,8 +9,8 @@ import { catchError } from 'rxjs/operators'
 })
 export class EmployeeDataService {
   //employees:IEmployee[];
-  baseUrl:string = 'http://localhost:3000/employees/';
-  apiUrl:string = 'http://localhost:8081/Employee/';
+  baseUrl:string = 'http://localhost:3000/employees/'; //local fake json-server
+  apiUrl:string = 'http://localhost:8081/Employee/';  //local hosted api link
   constructor(private http:HttpClient) { }
 
   getEmployees():Observable<IEmployee[]>{
@@ -36,7 +36,7 @@ export class EmployeeDataService {
     }).pipe(catchError(this.handleError));
   }
   deleteEmployee(id:number):Observable<void>{
-    return this.http.get<void>(this.baseUrl+id)
+    return this.http.delete<void>(this.apiUrl+id)
     .pipe(catchError(this.handleError));
   }
 

@@ -12,10 +12,7 @@ export class ListEmployeeComponent implements OnInit {
   constructor(private ds:EmployeeDataService) { }
 
   ngOnInit() {
-    this.ds.getEmployees().subscribe( 
-      (listEmployes) => this.employees = listEmployes,
-      (err) => console.log(err)
-      );
+    this.refreshTable();
   }
   btnClick_Edit(id:number){
     
@@ -23,8 +20,18 @@ export class ListEmployeeComponent implements OnInit {
   btnClick_Del(id:number){
     this.ds.deleteEmployee(id).subscribe(
       null,
-      (err) => console.log(err)
+      (err) => console.log(err),
+      ()=>{
+        this.refreshTable();
+        alert("Deleted id: "+id);
+      }
     );
+  }
+  refreshTable(){
+    this.ds.getEmployees().subscribe( 
+      (listEmployes) => this.employees = listEmployes,
+      (err) => console.log(err)
+      );
   }
 
 }

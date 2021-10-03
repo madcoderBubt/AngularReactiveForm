@@ -26,8 +26,8 @@ export class PutEmployeeComponent implements OnInit {
       'emailDomain': "Email domain must be from email.com",
       'required': "email is required"
     },
-    phone:{
-      minLength:"must be 5 characters at least",
+    phone: {
+      minLength: "must be 5 characters at least",
       maxLength: "not more than 20 charecters"
     },
     skillName: {
@@ -44,7 +44,7 @@ export class PutEmployeeComponent implements OnInit {
   formErr = {
     'fullName': '',
     'email': '',
-    'phone':''
+    'phone': ''
     // 'skills': [{
     //   'skillName': '',
     //   'expInYear': '',
@@ -58,7 +58,7 @@ export class PutEmployeeComponent implements OnInit {
     this.employeeForm = new FormGroup({
       fullName: new FormControl('',
         [Validators.required, Validators.maxLength(25), Validators.minLength(2)]),
-      phone: new FormControl('',[Validators.minLength(5),Validators.maxLength(20)]),
+      phone: new FormControl('', [Validators.minLength(5), Validators.maxLength(20)]),
       email: new FormControl('', [Validators.required, CustomValidator.email, CustomValidator.emailDomain('email.com')]),
       skills: this.fb.array([
         this.addSkill()
@@ -76,12 +76,12 @@ export class PutEmployeeComponent implements OnInit {
   }
   loadEmployee(emp: IEmployee) {
     this.employee = emp;
-    this.employeeForm.setControl('skills', this.loadSkills(this.employee.skills));    
+    this.employeeForm.setControl('skills', this.loadSkills(this.employee.skills));
     this.employeeForm.patchValue(this.employee);
   }
-  loadSkills(skills:ISkill[]):FormArray{
+  loadSkills(skills: ISkill[]): FormArray {
     let formArr = new FormArray([]);
-    skills.forEach(s=> {
+    skills.forEach(s => {
       formArr.push(this.addSkill());
     });
     return formArr;
@@ -93,28 +93,34 @@ export class PutEmployeeComponent implements OnInit {
     } else {
       //submit form
       console.log(this.employeeForm);
-      if(this.editId){
-        this.ds.putEmployee(this.employeeForm.value,this.editId).subscribe(
+      if (this.editId) {
+        this.ds.putEmployee(this.employeeForm.value, this.editId).subscribe(
           (data) => {
             this.employee = data;
             this.loadEmployee(this.employee);
           },
-          (err) => console.log(err)
+          (err) => console.log(err),
+          () => {
+            this.employeeForm.markAsUntouched();
+            alert("Data has been saved!");
+          }
         );
-      }else{
+      } else {
         this.ds.postEmployee(this.employeeForm.value).subscribe(
           (data) => this.employee = data,
-          (err) => console.log(err)
+          (err) => console.log(err),
+          () => {
+            this.employeeForm.markAsUntouched();
+            alert("Data has been saved!");
+          }
         );
       }
-      this.employeeForm.markAsUntouched();
-      alert("Data has been saved!")
     }
   }
   onAddSkillBtn_Click() {
     (this.employeeForm.get('skills') as FormArray).push(this.addSkill());
   }
-  onDelSkill_Click(index:number){
+  onDelSkill_Click(index: number) {
     let skillSet = (this.employeeForm.get('skills') as FormArray);
     skillSet.removeAt(index);
     skillSet.markAsTouched();
@@ -126,7 +132,7 @@ export class PutEmployeeComponent implements OnInit {
       const fc = fg.get(key);
 
       this.formErr[key] = '';
-      if (fc.touched || fc.dirty || fc.value!='')
+      if (fc.touched || fc.dirty || fc.value != '')
         for (const errKey in fc.errors) {
           if (Object.prototype.hasOwnProperty.call(fc.errors, errKey)) {
             const errMsg = this.validationMessages[key][errKey];
