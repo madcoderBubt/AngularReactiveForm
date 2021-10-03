@@ -1,0 +1,26 @@
+<table class="table table-bordered">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Full Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Skill</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let emp of employees">
+      <th scope="row">{{emp.id}}</th>
+      <td>{{emp.fullName}}</td>
+      <td>{{emp.email}}</td>
+      <td>{{emp.skills.length + (emp.skills.length > 1 ? ' skills':' skill')}}</td>
+      <td>
+        <div class="btn-group btn-group-sm">
+          <a class="btn btn-primary" routerLink="/emp/put/{{emp.id}}">Edit</a>
+          <!-- <button type="button" (click)="btnClick_Edit(emp.id)" class="btn btn-primary">Edit</button> -->
+          <button type="button" (click)="btnClick_Del(emp.id)" class="btn btn-danger">Del</button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

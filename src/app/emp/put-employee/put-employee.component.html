@@ -1,0 +1,95 @@
+ <div class="card card-primary">
+  <div class="card-header">
+    Employee Profile
+    <div class="float-right">
+      <a routerLink="/emp/list"></a>
+    </div>
+  </div>
+  <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+    <div class="card-body">
+      
+      <div class="form-group" >
+        <label for="fullName">Full Name:</label>
+        <input type="text" formControlName="fullName" class="form-control" placeholder="Put your Full Name"
+        [ngClass]="{'is-invalid': formErr.fullName }" (blur)="checkValidation()">
+        <div class="form-text text-muted d-none" [ngClass]="{'d-block': formErr.fullName }">
+          <small class="text-danger">{{formErr.fullName}}</small>          
+        </div>    
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" formControlName="email" class="form-control" placeholder="name@email.com"
+        [ngClass]="{'is-invalid': formErr.email}" (blur)="checkValidation()">
+        <div class="form-text text-muted d-none" [ngClass]="{'d-block': formErr.email }">
+          <small class="text-danger">{{formErr.email}}</small>          
+        </div> 
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone:</label>
+        <input type="email" formControlName="phone" class="form-control" placeholder="name@email.com"
+        [ngClass]="{'is-invalid': formErr.phone}" (blur)="checkValidation()">
+        <div class="form-text text-muted d-none" [ngClass]="{'d-block': formErr.phone }">
+          <small class="text-danger">{{formErr.phone}}</small>          
+        </div> 
+      </div>
+      <div >
+        <label for="Skills">Skills:</label>
+        <button class="btn btn-primary ml-3" type="button" [disabled]="employeeForm.get('skills').invalid" (click)="onAddSkillBtn_Click()">Add New Skill</button>
+        <div formArrayName="skills">
+          <div class="subFormGroup" [formGroupName]="i" *ngFor="let skill of employeeForm.get('skills').controls; let i=index">
+            <div class="form-row mb-3 mt-3">
+              <div class="col-md-5">
+                <input type="text" formControlName="skillName" placeholder="Skill Name" class="form-control" [id]="'skillName'+i"
+                 [ngClass]="{'is-invalid': skill.get('skillName').errors && (skill.get('skillName').touched || skill.get('skillName').dirty) }">
+                <div class="form-text text-muted d-none" 
+                  [ngClass]="{'d-block': skill.get('skillName').errors && (skill.get('skillName').touched || skill.get('skillName').dirty) }">
+                  <small class="text-danger" *ngIf="skill.get('skillName').errors?.required">
+                    {{ validationMessages.skillName['required']}}
+                  </small>          
+                </div> 
+              </div>
+              <div class="col-md-5">
+                <input type="number" formControlName="expInYear" placeholder="Years of experiance.." class="form-control" [id]="'expInYear'+i"
+                [ngClass]="{'is-invalid': skill.get('expInYear').errors && (skill.get('expInYear').touched || skill.get('expInYear').dirty)}" >
+                <div class="form-text text-muted d-none" 
+                [ngClass]="{'d-block': skill.get('expInYear').errors && (skill.get('expInYear').touched || skill.get('expInYear').dirty)}">
+                  <small class="text-danger">{{validationMessages.expInYear['required']}}</small>          
+                </div> 
+              </div>
+              <div class="col-md-2">
+                <button type="button" class="btn btn-danger" style="float: right;" (click)="onDelSkill_Click(i)"
+                 *ngIf="employeeForm.get('skills').length>1" title="this skill set will be deleted after save.">X</button>
+              </div>
+            </div>
+            <label for="proficiency">Proficiency:</label>
+            <div class="form-group" [ngClass]="{'text-danger': skill.get('proficiency').errors 
+              && (skill.get('proficiency').touched || skill.get('proficiency').dirty)}">
+              <input type="radio" formControlName="proficiency" value="Beginner" > Beginner
+              <input type="radio" formControlName="proficiency" value="Intermediate" > Intermediate
+              <input type="radio" formControlName="proficiency" value="Expert" > Expert
+            </div>
+            <div class="form-text text-muted d-none" [ngClass]="{'d-block': skill.get('proficiency').errors 
+              && (skill.get('proficiency').touched || skill.get('proficiency').dirty)}">
+              <small class="text-danger">{{'hello'}}</small>          
+            </div> 
+          </div><!--Default Skill-->
+        </div>
+      </div>
+      
+
+    </div>
+    <!--End card body-->
+    <div class="card-footer text-muted">
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary" [disabled]="employeeForm.invalid || (employeeForm.untouched)" [attr.title]="(employeeForm.invalid)?'fill the form correctly ':'save to server'">Save</button>
+        <button type="button" class="btn btn-primary" (click)="onCheckData()">Check Data</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div>
+  valid: {{employeeForm.valid}}<br>
+  dirty: {{employeeForm.dirty}}<br>
+  touched: {{employeeForm.touched}}<br>
+</div>
